@@ -1,13 +1,22 @@
-import * as React from 'react';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function MediaCard({ id, text, kits, imgURI, Rs }) {
+    const toDataURL = url => fetch(url)
+        .then(response => response.blob())
+        .then(blob => new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onloadend = () => resolve(reader.result)
+            reader.onerror = reject
+            reader.readAsDataURL(blob)
+        }))
+    console.log(imgURI, "DKDDKODKODODDKOKOS");
+
+    // console.log(imgURI?.includes("blob") ? toDataURL(imgURI) : imgURI, 'DODOKDKODODKOKDODKO');
     const navigate = useNavigate();
     return (
         <Card style={{ textAlign: "center", cursor: 'pointer', borderRadius: 15, objectFit: "cover" }} onClick={() => {

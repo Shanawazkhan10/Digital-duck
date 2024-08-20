@@ -4,27 +4,31 @@ import BasicButtons from './Button'
 import MediaCard from './CommanCard'
 import "./style.css"
 import { FireBaseApp } from '../firebase'
-import { child, get, getDatabase, push, ref, set } from "firebase/database"
+import { child, get, getDatabase, push, ref, set, update } from "firebase/database"
 import SimpleBackdrop from './BackDrop'
+import img from "../assets/an4.jpg"
 const MainComponent = () => {
-    useEffect(() => {
-        // const db = getDatabase(FireBaseApp)
-        // const dbrefLive = ref(db, "ProductList")
-        // console.log(Object.values(snapshotlive.val())?.[0], "DJIJODJDODJODOJDOJ");
+    // useEffect(() => {
+    //     const db = getDatabase(FireBaseApp)
 
-        // const newVersion = push(ref(db, "ProductList/"));
-        // set(newVersion, arrCard
-        // )
-        //     .then(() => alert("data saved Successfullu"))
-        //     .catch(() => alert("FAILED"))
-    }, [])
+    //     const newVersion = push(ref(db, "ProductList"));
+    //     set(newVersion, arrCard
+    //     )
+    //         .then(() => alert("data saved Successfullu"))
+    //         .catch(() => alert("FAILED"))
+    // }, [])
     const [liveData, setLiveData] = useState([])
+    const [ApproveList, setApproveList] = useState([])
     const [loading, setLoading] = useState([])
     const fetchVersion = async () => {
         const db = getDatabase(FireBaseApp)
         const dbrefLive = ref(db, "ProductList")
         const snapshotlive = await get(dbrefLive)
         await setLiveData(Object.values(snapshotlive.val())?.[0])
+
+        let ApprData = await (Object.values(snapshotlive.val())?.[0])?.filter?.((i) => i?.isStatus)
+        setApproveList(ApprData)
+
         if (Object.values(snapshotlive.val())?.[0].length > 0) {
             setLoading(false)
         }
@@ -33,11 +37,20 @@ const MainComponent = () => {
         fetchVersion()
     }, [])
 
-    // await setLiveData(Object.values(snapshotlive?.val())?.[0])
-    useEffect(() => {
-        console.log(liveData, "DKDKOKODKODKODDKODKO");
+    // const handleSubmit = (domain = null, val = null) => {
+    //     const db = getDatabase(FireBaseApp)
+    //     const updates = {};
 
-    }, [liveData])
+    //     let tempArr = { id: 1, text: "Engage with custom activities.", kits: "UI Kits", imgURI: img, Rs: 20.00, isStatus: true, dateTimeNow: new Date().toLocaleString() }
+
+    //     liveData?.push(tempArr)
+
+    //     updates["ProductList"] = [liveData]
+
+    //     return update(ref(db), updates)
+    //         .then(() => window.location.reload())
+    //         .catch(() => alert("ERROR Occurs"));
+    // }
 
     return (
         <div>
@@ -57,7 +70,7 @@ const MainComponent = () => {
             <section id="features">
                 <h2>Features</h2>
                 <div class="features-container">
-                    {liveData?.map(({
+                    {ApproveList?.map(({
                         id, text, kits, imgURI, Rs
                     }) => (
                         <MediaCard id={id} text={text} kits={kits} imgURI={imgURI} Rs={Rs} />

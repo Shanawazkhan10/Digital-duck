@@ -1,13 +1,14 @@
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { Button, Grid, MenuItem, TextField } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import img from "../../assets/seller.png"
 import BasicButtons from '../../Component/Button'
 import "../../Component/style.css"
 import { child, get, getDatabase, push, ref, set, update } from "firebase/database"
 import { FireBaseApp } from '../../firebase'
+import SimpleBackdrop from '../../Component/BackDrop'
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -21,7 +22,12 @@ const VisuallyHiddenInput = styled('input')({
 });
 const Seller = () => {
     const navigate = useNavigate()
-    const [sellingData, setSellingData] = useState({ name: "", des: "", vari: "Icons", price: "", uri: "" })
+    const [liveData, setLiveData] = useState([])
+    const [loading, setLoading] = useState([])
+    const [sellingData, setSellingData] = useState({
+
+        name: "", des: "", vari: "Icons", price: "", uri: ""
+    })
     const currencies = [
         {
             value: 'Icons',
@@ -36,32 +42,59 @@ const Seller = () => {
             label: 'Logos',
         },
     ];
+    const fetchVersion = async () => {
+        const db = getDatabase(FireBaseApp)
+        const dbrefLive = ref(db, "ProductList")
+        const snapshotlive = await get(dbrefLive)
+        await setLiveData(Object.values(snapshotlive.val())?.[0])
+        if (Object.values(snapshotlive.val())?.[0].length > 0) {
+            setLoading(false)
+        }
+    }
+    useEffect(() => {
+        fetchVersion()
+    }, [])
     const handleSubmit = (domain = null, val = null) => {
+        setLoading(true)
         const db = getDatabase(FireBaseApp)
         const updates = {};
-        // let dataToUpdate=liveVersion?.
-        // let updatedList = liveVersion.map(item => {
-        //     if (item.domain === domain) {
-        //         return { ...item, version: val, dateTimeNow: new Date().toLocaleString() };
-        //     }
-        //     return item;
-        // });
-        // updates["Versioning"] = [updatedList]
+        const { name, des, vari, price, uri } = sellingData
+        let payload = {
+            id: Math.random(), email: name, text: des, kits: vari, imgURI: uri, Rs: price, isStatus: false, dateTimeNow: new Date().toLocaleString()
+        }
+        console.log(payload, "DMODDOKKOODOKDOKDKO 12121212");
 
-        // return update(ref(db), updates)
-        //     .then(() => window.location.reload())
-        //     .catch(() => alert("ERROR Occurs"));
+        liveData?.push(payload)
+        // console.log("CICJCIJIJCJICJI", liveData, sellingData);
+
+        // let tempArr = { id: 1, text: "Engage with custom activities.", kits: "UI Kits", imgURI: img, Rs: 20.00, isStatus: true, dateTimeNow: new Date().toLocaleString() }
+        // liveData?.push(tempArr)
+
+        updates["ProductList"] = [liveData]
+
+        return update(ref(db), updates)
+            .then(() => { window.location.replace("./Submit") })
+            .catch(() => alert("ERROR Occurs"));
     }
     const handleChange = async (e) => {
         const { name, value, type } = e.target
         if (type === "file") {
-            setSellingData(prev => ({ ...prev, 'uri': base64Format(e.target.files[0]) }))
+            await base64Format(e.target.files[0])
         } else {
             setSellingData(prev => ({ ...prev, [name]: value }))
         }
     }
-    const base64Format = (imageURL) => {
-        return window.URL.createObjectURL(imageURL);
+    const base64Format = async (imageURL) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.readAsDataURL(imageURL)
+            reader.onload = async () => {
+                setSellingData(prev => ({ ...prev, 'uri': reader.result }))
+                await resolve(reader.result)
+            }
+            reader.onerror = reject
+        })
+
     };
     return (
         <div>
@@ -76,7 +109,7 @@ const Seller = () => {
                             <TextField
                                 name='name'
                                 onChange={handleChange}
-                                style={{ width: 400 }} id="outlined-basic" label="Name" variant="outlined" />
+                                style={{ width: 400 }} id="outlined-basic" label="Email" variant="outlined" />
                         </Grid>
                         <Grid style={{ padding: 10 }} item md={12} xs={12}>
                             <TextField style={{ width: 400 }}
@@ -90,7 +123,7 @@ const Seller = () => {
                             />
                         </Grid>
                         <Grid style={{ padding: 10 }} item md={12} xs={12}>
-                            <TextField name='price' style={{ width: 400 }} id="outlined-basic" label="Price" variant="outlined" />
+                            <TextField name='price' onChange={handleChange} style={{ width: 400 }} id="outlined-basic" label="Price" variant="outlined" />
                         </Grid>
                         <Grid style={{ padding: 10 }} item md={12} xs={12}>
 
@@ -152,7 +185,7 @@ const Seller = () => {
                         </Grid>
                         <Grid style={{ padding: 10 }} item md={12} xs={12}>
                             <BasicButtons
-                                onClick={() => { window.location.replace("./Submit") }}
+                                onClick={handleSubmit}
                                 text="Save & Continue"
                                 class="cta-btn"
                                 variant="contained" />
@@ -160,6 +193,7 @@ const Seller = () => {
                     </Grid>
                 </Grid>
             </Grid>
+            <SimpleBackdrop isload={loading} />
         </div>
     )
 }
