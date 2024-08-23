@@ -14,19 +14,22 @@ export default function MediaCard({ id, text, kits, imgURI, Rs }) {
             reader.onerror = reject
             reader.readAsDataURL(blob)
         }))
-    console.log(imgURI, "DKDDKODKODODDKOKOS");
 
     // console.log(imgURI?.includes("blob") ? toDataURL(imgURI) : imgURI, 'DODOKDKODODKOKDODKO');
     const navigate = useNavigate();
     return (
         <Card style={{ textAlign: "center", cursor: 'pointer', borderRadius: 15, objectFit: "cover" }} onClick={() => {
-            navigate(
-                "./Product-Description", {
-                state: {
-                    id: id, pText: text, kits: kits, img: imgURI, rs: Rs
+            if (window.location.pathname === "/") {
+                return false
+            } else {
+                navigate(
+                    "./Product-Description", {
+                    state: {
+                        id: id, pText: text, kits: kits, img: imgURI, rs: Rs
+                    }
                 }
+                )
             }
-            )
         }} sx={{ maxWidth: 345, maxHeight: 390 }}>
             <div style={{ display: 'flex', marginTop: 12, justifyContent: "space-evenly" }}>
                 <CardMedia

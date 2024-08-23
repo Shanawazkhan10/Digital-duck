@@ -1,11 +1,13 @@
 import { Box, Divider, Grid } from '@mui/material';
-import React from 'react'
+import React, { useState } from 'react'
 import img from "../assets/checkout.jpg"
 import "../Component/style.css"
 import BasicButtons from '../Component/Button';
 import RazorPay from '../Component/RazorPay';
 import { useSelector } from 'react-redux';
+import BasicModal from '../Component/Modal/Modal';
 const Checkout = () => {
+    const [isPopUp, setisPopUp] = useState(false)
     const cartItem = useSelector(state => state.cart.cart)
     var grandTotal = function (arr) {
         return arr?.reduce((sum, i) => {
@@ -72,8 +74,9 @@ const Checkout = () => {
                             justifyContent: "center"
                         }}>
                             <RazorPay /> &nbsp;&nbsp;
+                            {isPopUp && <BasicModal isPopUp={isPopUp} setisPopUp={setisPopUp} />}
                             <BasicButtons
-                                onClick={() => { window.location.replace("./Submit") }}
+                                onClick={() => { setisPopUp(true) }}
                                 text="Pay with QR"
                                 class="cta-btn"
                                 outline={true}

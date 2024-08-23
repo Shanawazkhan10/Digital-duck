@@ -5,10 +5,11 @@ import img from "../../assets/submit.png"
 import "../../Component/style.css"
 
 const Submit = () => {
+    console.log(window.location.search, "DKODDKODKODDKODOK");
     const navigate = useNavigate()
     return (
         <div>
-            <Grid container spacing={2}>
+            {!!window.location.search ? <Grid container spacing={2}>
                 <Grid style={{ padding: 40 }} item md={6} xs={12}>
                     <img style={{ borderRadius: 15 }} width={600} height={400} src={img} />
                 </Grid>
@@ -19,6 +20,19 @@ const Submit = () => {
                     <span style={{ fontSize: 20, fontWeight: 300 }}>Have patience your UI KITS will be listed on verification done</span>
                 </Grid>
             </Grid>
+                :
+                <Grid container spacing={2}>
+                    <Grid style={{ padding: 40 }} item md={6} xs={12}>
+                        <img style={{ borderRadius: 15 }} width={600} height={400} src={img} />
+                    </Grid>
+                    <Grid style={{ marginTop: 110, padding: 40 }} item md={6} xs={12}>
+                        <span className='bg-blue ' style={{ fontSize: 40, fontWeight: 700 }}>Payment successfully</span>
+                        <br />
+                        <br />
+                        <span style={{ fontSize: 20, fontWeight: 300 }}>Have patience your UI KITS will be delivered once verification done</span>
+                    </Grid>
+                </Grid>
+            }
         </div>
     )
 }

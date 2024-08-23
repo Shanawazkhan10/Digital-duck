@@ -12,13 +12,16 @@ import Submit from './Pages/SellerJourney/Submit';
 import AdminHome from './Pages/AdminMod/AdminHome';
 import ApprovalList from './Pages/AdminMod/AdminList';
 import CashApproval from './Pages/AdminMod/CashApproval';
+import WebsiteDoc from './Pages/WebsiteDoc';
+import Trending from './Pages/Trending';
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path="/Product-Description" element={<DescriptionPage />} />
+          <Route path="/Trending" element={<Trending />} />
+          <Route path="/Trending/Product-Description" element={<DescriptionPage />} />
           <Route path="/Admin" element={<AdminHome />} />
           <Route path="/ApprovalList" element={<ApprovalList />} />
           <Route path="/Order" element={<Order />} />
@@ -26,6 +29,7 @@ function App() {
           <Route path="/Submit" element={<Submit />} />
           <Route path="/CashApproval" element={<CashApproval />} />
           <Route path="/Seller" element={<Seller />} />
+          <Route path="/WebsiteDoc" element={<WebsiteDoc />} />
           <Route path="/" element={<Home />}>
           </Route>
         </Routes>

@@ -7,7 +7,9 @@ import { FireBaseApp } from '../firebase'
 import { child, get, getDatabase, push, ref, set, update } from "firebase/database"
 import SimpleBackdrop from './BackDrop'
 import img from "../assets/an4.jpg"
+import { useNavigate } from 'react-router-dom'
 const MainComponent = () => {
+    const navigate = useNavigate()
     // useEffect(() => {
     //     const db = getDatabase(FireBaseApp)
 
@@ -62,15 +64,15 @@ const MainComponent = () => {
                         </h1>
                         <p>Welcome to Digital Duck. Every asset on our platform is verified by our team to ensure our highest quality standards.</p>
                     </div>
-                    <BasicButtons text="Browse Trending" class="cta-btn" variant="contained" />
+                    <BasicButtons onClick={() => navigate("/Trending")} text="Browse Trending" class="cta-btn" variant="contained" />
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <BasicButtons text="Our Quality Promises" class="cta-btn" outline={true} />
+                    <BasicButtons onClick={() => navigate("/WebsiteDoc")} text="Our Quality Promises" class="cta-btn" outline={true} />
                 </div>
             </section>}
             <section id="features">
                 <h2>Features</h2>
                 <div class="features-container">
-                    {ApproveList?.map(({
+                    {ApproveList?.slice(0, 8)?.map(({
                         id, text, kits, imgURI, Rs
                     }) => (
                         <MediaCard id={id} text={text} kits={kits} imgURI={imgURI} Rs={Rs} />

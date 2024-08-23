@@ -54,6 +54,8 @@ const Seller = () => {
     useEffect(() => {
         fetchVersion()
     }, [])
+
+
     const handleSubmit = (domain = null, val = null) => {
         setLoading(true)
         const db = getDatabase(FireBaseApp)
@@ -73,7 +75,7 @@ const Seller = () => {
         updates["ProductList"] = [liveData]
 
         return update(ref(db), updates)
-            .then(() => { window.location.replace("./Submit") })
+            .then(() => { window.location.replace("./Submit?sellerPage") })
             .catch(() => alert("ERROR Occurs"));
     }
     const handleChange = async (e) => {

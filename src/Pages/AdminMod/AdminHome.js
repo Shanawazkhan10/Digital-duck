@@ -26,16 +26,16 @@ const AdminHome = () => {
             <div style={{ marginLeft: 300 }}>
                 <Grid container spacing={2}>
                     <Grid style={{ padding: 40 }} item md={4} xs={12}>
-                        <AdminCard />
+                        <AdminCard heading={"Active Users"} number={48} />
                         <br />
                         <br />
-                        <AdminCard />
+                        <AdminCard heading={"UI Approval"} number={4} />
                     </Grid>
                     <Grid style={{ padding: 40 }} item md={4} xs={12}>
-                        <AdminCard />
+                        <AdminCard heading={"Purchase Approval"} number={6} />
                         <br />
                         <br />
-                        <AdminCard />
+                        <AdminCard heading={"Product List Count"} number={16} />
                     </Grid>
                 </Grid>
             </div>
